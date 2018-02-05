@@ -1,6 +1,14 @@
 {"1.1.0",
-[{<<"poolboy">>,{pkg,<<"poolboy">>,<<"1.5.1">>},0}]}.
+[{<<"certifi">>,{pkg,<<"certifi">>,<<"2.0.0">>},0},
+ {<<"idna">>,{pkg,<<"idna">>,<<"5.1.0">>},0},
+ {<<"poolboy">>,{pkg,<<"poolboy">>,<<"1.5.1">>},0},
+ {<<"ssl_verify_fun">>,{pkg,<<"ssl_verify_fun">>,<<"1.1.3">>},0},
+ {<<"unicode_util_compat">>,{pkg,<<"unicode_util_compat">>,<<"0.3.1">>},1}]}.
 [
 {pkg_hash,[
- {<<"poolboy">>, <<"6B46163901CFD0A1B43D692657ED9D7E599853B3B21B95AE5AE0A777CF9B6CA8">>}]}
+ {<<"certifi">>, <<"A0C0E475107135F76B8C1D5BC7EFB33CD3815CB3CF3DEA7AEFDD174DABEAD064">>},
+ {<<"idna">>, <<"D72B4EFFEB324AD5DA3CAB1767CB16B17939004E789D8C0AD5B70F3CEA20C89A">>},
+ {<<"poolboy">>, <<"6B46163901CFD0A1B43D692657ED9D7E599853B3B21B95AE5AE0A777CF9B6CA8">>},
+ {<<"ssl_verify_fun">>, <<"6C49665D4326E26CD4A5B7BD54AA442B33DADFB7C5D59A0D0CD0BF5534BBFBD7">>},
+ {<<"unicode_util_compat">>, <<"A1F612A7B512638634A603C8F401892AFBF99B8CE93A45041F8AACA99CADB85E">>}]}
 ].
