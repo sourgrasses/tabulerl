@@ -1,6 +1,6 @@
 -module(tabulerl_url).
 
--export([]).
+-export([parse/1]).
 
 -record(url, {
           host = ""     :: string(),
@@ -9,3 +9,6 @@
           user = <<>>   :: binary(),
           pass = <<>>   :: binary()
          }).
+
+parse(Url) ->
+    .
