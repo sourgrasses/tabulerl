@@ -31,7 +31,7 @@ close(Sock) ->
 
 %% @doc Shuts down a TCP socket by signaling to the peer that no more data will be sent.
 %% Socket can still be read from until peer closes connection.
--spec(inet:socket())
+-spec shutdown(inet:socket())
     -> ok | {error, inet:posix()}.
 shutdown(Sock) ->
     gen_tcp:shutdown(Sock, write).
@@ -50,12 +50,12 @@ port(Sock) ->
 
 %% @doc Get the address and port for a given socket connection.
 -spec peername(inet:socket())
-    -> {ok, {inet:ip_address(), inet:port_number()}} | {error, atom()}
+    -> {ok, {inet:ip_address(), inet:port_number()}} | {error, atom()}.
 peername(Sock) ->
     inet:peername(Sock).
 
 %% @doc Get the local address and port for a given socket connection.
 -spec localname(inet:socket())
-    -> {ok, {inet:ip_address(), inet:port_number()}} | {error, atom()}
+    -> {ok, {inet:ip_address(), inet:port_number()}} | {error, atom()}.
 localname(Sock) ->
     inet:sockname(Sock).
