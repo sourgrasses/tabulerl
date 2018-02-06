@@ -2,7 +2,15 @@
 
 -module(tabulerl_tcp).
 
--export([connect/1, close/1]).
+-export([connect/1,
+        send/2,
+        recv/2,
+        close/1,
+        shutdown/1,
+        controlling_process/2,
+        port/1,
+        peername/1,
+        localname/1]).
 
 %% @doc Establish a connection to a SQL Server host. Takes a url, parses it using tabulerl_url:parse/1, and returns an inet:socket().
 -spec connect(tabulerl_url:url())
