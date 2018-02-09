@@ -25,7 +25,7 @@ connect(Url) ->
 send(Sock, Packet) ->
     gen_tcp:send(Sock, Packet).
 
-%% @doc Receive a packet from a socket Sock.
+%% @doc Receive a packet from a passive socket Sock.
 -spec recv(inet:socket(), non_neg_integer())
     -> {ok, string() | binary() | term()} | {error, atom() | inet:posix()}.
 recv(Sock, Length) ->
