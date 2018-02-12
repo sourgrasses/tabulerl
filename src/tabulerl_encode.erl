@@ -2,7 +2,7 @@
 
 -include("tabulerl.hrl").
 
--export([encode/2, encode_ucs2/1]).
+-export([encode/2, encode_password/2, encode_ucs2/1]).
 
 encode(prelogin, Opts) ->
     Version = <<16#0B, 16#00, 16#0C, 16#38, 16#00, 16#00>>,
@@ -20,8 +20,8 @@ encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db
     Size = <<?pack_size:4/unit:8>>,
     Client_ver = <<16#00:4/unit:8>>,
     Client_pid = <<16#00:4/unit:8>>,
-    Cnx_id = 16#00,
-    Version_data = <<Version/binary, Size/binary, Client_ver, Client_pid/binary, Cnx_id:4/unit:8>>,
+    Cnx_id = <<16#00:4/unit:8>>,
+    Version_data = <<Version/binary, Size/binary, Client_ver/binary, Client_pid/binary, Cnx_id/binary>>,
     
     Opt_flags1 = 16#00,
     Opt_flags2 = 16#00,
@@ -43,7 +43,7 @@ encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db
     Offset_start = byte_size(Version_data) + byte_size(Flags_data) + 4 + 58,
 
     Ib_host = <<Offset_start:2/little-unit:8>>,
-    Cch_host = <<0:2/little-unit:8>>,
+    Cch_host = <<16#00:2/little-unit:8>>,
 
     User_size = byte_size(User),
     Ib_user = <<Offset_start:2/little-unit:8>>,
@@ -71,26 +71,26 @@ encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db
                Cch_user/binary,
                Ib_pass/binary,
                Cch_pass/binary,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
                Ib_clilib/binary,
                Cch_clilib/binary,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
                Ib_database/binary,
                Cch_database/binary,
-               <<0:6/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:2/little-unit:8>>,
-               <<0:4/little-unit:8>>
+               16#00:6/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:2/little-unit:8,
+               16#00:4/little-unit:8
              >>,
 
     Body_data = <<Version_data/binary, Flags_data/binary, Offset/binary, Login_data/binary>>,
@@ -123,8 +123,9 @@ encode_packs(Type, <<Data/binary>>, Packs) ->
     Header = encode_header(Type, Data, 1),
     encode_packs(Type, <<>>, [<<Header/binary, Data/binary>> | [Packs]]).
 
-encode_password(<<>>, Pass) ->
-    lists:reverse(Pass);
+encode_password(<<>>, Pbits) ->
+    Pass = lists:reverse(Pbits),
+    list_to_bitstring(Pass);
 
 encode_password(<<Pass:8/bitstring, Tail/binary>>, Acc) ->
     <<A:4/bitstring, B:4/bitstring>> = Pass,
