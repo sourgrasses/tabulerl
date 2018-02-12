@@ -17,6 +17,7 @@
 %% packets are 4KB in size, with 8 byte headers and 4,088 bytes of space for data
 -define(pack_data_size, 4088).
 -define(pack_header_size, 8).
+-define(pack_size, 4096).
 
 %% types and statuses for packet headers
 -define(pack_sqlbatch, 16#01).
@@ -36,7 +37,7 @@
 -define(status_reset, 16#08).
 -define(status_reset_skip, 16#10).
 
--define(spid, 16#0000:16).
+-define(spid, 16#0000:2/unit:8).
 
 -define(window, 16#00).
 
