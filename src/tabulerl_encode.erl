@@ -17,9 +17,9 @@ encode(prelogin, Opts) ->
 %% TODO: lots of flags and stuff to clean up here
 encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db}) ->
     Version = <<16#04, 16#00, 16#00, 16#74>>,
-    Size = <<?pack_size:4/unit:8>>,
+    Size = <<?pack_size:4/little-unit:8>>,
     Client_ver = <<16#00:4/unit:8>>,
-    Client_pid = <<16#00:4/unit:8>>,
+    Client_pid = <<16#00, 16#10, 16#00, 16#00>>,
     Cnx_id = <<16#00:4/unit:8>>,
     Version_data = <<Version/binary, Size/binary, Client_ver/binary, Client_pid/binary, Cnx_id/binary>>,
     
@@ -27,8 +27,8 @@ encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db
     Opt_flags2 = 16#00,
     Type_flag = 16#01,
     Opt_flags3 = 16#00,
-    Time_zone = <<16#00:4/unit:8>>,
-    Lcid = <<16#00:4/unit:8>>,
+    Time_zone = <<16#00:4/little-unit:8>>,
+    Lcid = <<16#00:4/little-unit:8>>,
     Flags_data = <<Opt_flags1, Opt_flags2, Type_flag, Opt_flags3, Time_zone/binary, Lcid/binary>>,
 
     User = encode_ucs2(U),
@@ -45,22 +45,22 @@ encode(login, #{user := U, pass := P, host := Host, port := Port, database := Db
     Ib_host = <<Offset_start:2/little-unit:8>>,
     Cch_host = <<16#00:2/little-unit:8>>,
 
-    User_size = byte_size(User),
+    User_size = round(byte_size(User) / 2),
     Ib_user = <<Offset_start:2/little-unit:8>>,
     Cch_user = <<User_size:2/little-unit:8>>,
 
-    Pass_size = byte_size(Pass),
-    Pass_offset = Offset_start + User_size,
+    Pass_size = round(byte_size(Pass) / 2),
+    Pass_offset = Offset_start + byte_size(User),
     Ib_pass = <<Pass_offset:2/little-unit:8>>,
     Cch_pass = <<Pass_size:2/little-unit:8>>,
 
-    Clilib_size = byte_size(Client_lib),
-    Clilib_offset = Pass_offset + Pass_size,
+    Clilib_size = round(byte_size(Client_lib) / 2),
+    Clilib_offset = Pass_offset + byte_size(Pass),
     Ib_clilib = <<Clilib_offset:2/little-unit:8>>,
     Cch_clilib = <<Clilib_size:2/little-unit:8>>,
 
-    Database_size = byte_size(Database),
-    Database_offset = Clilib_offset + Clilib_size,
+    Database_size = round(byte_size(Database) / 2),
+    Database_offset = Clilib_offset + byte_size(Client_lib),
     Ib_database = <<Database_offset:2/little-unit:8>>,
     Cch_database = <<Database_size:2/little-unit:8>>,
 
